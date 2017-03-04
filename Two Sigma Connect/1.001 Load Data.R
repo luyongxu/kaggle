@@ -7,6 +7,11 @@ library(ggmap)
 library(h2o)
 library(lubridate)
 library(readr)
+library(stringr)
+library(xgboost)
+library(Matrix)
+library(syuzhet)
+library(lme4)
 
 # 2. Load training data. 
 train <- fromJSON("./Two Sigma Connect/Raw Data/train.json")
@@ -18,3 +23,5 @@ test <- fromJSON("./Two Sigma Connect/Raw Data/test.json")
 vars <- setdiff(names(test), c("photos", "features"))
 test <- map_at(test, vars, unlist) %>% tibble::as_tibble()
 
+# 4. Clean workspace.
+rm(vars)

@@ -2,11 +2,11 @@ source("./Two Sigma Connect/1.001 Load Data.R")
 source("./Two Sigma Connect/1.001 Engineer Features.R")
 
 # 1. Examine data. 
-str(train[, vars])
-str(test[, vars])
+dim(train)
+dim(test)
 
 # 2. Interest level. 
-ggplot(train, aes(x = interest_level)) + 
+ggplot(train, aes(x = interest_level, fill = interest_level)) + 
   geom_bar()
 
 # 3. Bathrooms. 
@@ -56,6 +56,9 @@ ggmap(nyc) +
   geom_point(data = train, aes(x = longitude, y = latitude), alpha = 0.1, size = 0.5, colour = "red")
 ggmap(nyc) + 
   geom_point(data = train, aes(x = longitude, y = latitude, colour = interest_level), alpha = 0.5)
+ggmap(nyc) + 
+  geom_point(data = train, aes(x = longitude, y = latitude, colour = interest_level), alpha = 0.5) + 
+  facet_wrap(~ interest_level)
 
 # 9. Created. 
 ggplot(train, aes(x = created_day)) + 

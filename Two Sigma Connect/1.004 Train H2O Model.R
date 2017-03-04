@@ -5,10 +5,10 @@ source("./Two Sigma Connect/1.002 Engineer Features.R")
 h2o.init(nthreads = -1, max_mem_size = "10G")
 
 # 2. Import R object to H2O instance. 
-train_h2o <- as.h2o(train)
+train_h2o <- as.h2o(train[, c(features_to_use, "interest_level")])
 
 # 3. Train model.
-m01 <-h2o.gbm(x = setdiff(colnames(train), "interest_level"), 
+m01 <-h2o.gbm(x = features_to_use, 
               y = "interest_level", 
               training_frame = train_h2o, 
               distribution = "multinomial", 
@@ -25,11 +25,10 @@ m01 <-h2o.gbm(x = setdiff(colnames(train), "interest_level"),
               seed = 321)
 
 # 4. Import test to H2O instance. 
-test_h2o <- as.h2o(test)
+test_h2o <- as.h2o(test[, c(features_to_use, "interest_level")])
 
 # 5. Make predictions. 
-predictions <- as.data.frame(h2o.predict(m01, test_h2o))
-predictions <- predictions %>% 
+predictions <- as.data.frame(h2o.predict(m01, test_h2o)) %>% 
   mutate(listing_id = test$listing_id) %>% 
   select(listing_id, low, medium, high)
 
