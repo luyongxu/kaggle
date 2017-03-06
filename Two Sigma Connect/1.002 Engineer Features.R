@@ -24,7 +24,7 @@ combined <- combined %>%
 
 # 4. Distance to city center. 
 combined <- combined %>% 
-  mutate(distance_city = sqrt((longitude - -73.968285)^2 + (latitude - 40.785091)^2))
+  mutate(distance_center = sqrt((longitude - -73.968285)^2 + (latitude - 40.785091)^2))
 
 # 5. Fixing outliers. 
 # outliers <- combined %>% 
@@ -69,6 +69,7 @@ combined <- combined %>%
                                      mean(as.numeric(combined$interest_level), na.rm = TRUE), 
                                      manager_skill_pred))
 
+
 # 11. No building id indicator.  
 combined <- combined %>% 
   mutate(no_building_id = ifelse(building_id == 1, 1, 0))
@@ -103,7 +104,7 @@ combined <- combined %>%
 features_to_use <- c("bathrooms", "bedrooms", "latitude", "longitude", "price", 
                      "photos_count", "features_count", "description_count", 
                      "created_year", "created_yday", "created_month", "created_day", 
-                     "created_wday", "created_hour", "distance_city", 
+                     "created_wday", "created_hour", "distance_center", 
                      "display_address_n", "manager_id_n", "building_id_n", "street_address_n", 
                      "display_address", "manager_id", "building_id", "street_address", "listing_id", 
                      "manager_skill_pred", "no_building_id", "price_bedroom", "price_bathroom", 

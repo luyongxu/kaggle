@@ -12,10 +12,8 @@ xgtest = xgb.DMatrix(data = as.matrix(val_X), label = as.matrix(val_y))
 watchlist <- list(train = xgtrain, test = xgtest)
 
 # 3. Train XGBoost model on development set, cross validated on validation set. 
-# [289]	train-mlogloss:0.341450	test-mlogloss:0.524025
-# [254]	train-mlogloss:0.359810	test-mlogloss:0.523627
-# [198]	train-mlogloss:0.384498	test-mlogloss:0.519494
-# [252]	train-mlogloss:0.352134	test-mlogloss:0.517762
+# [252]	train-mlogloss:0.352134	test-mlogloss:0.517762 for eta = 0.1
+# [525]	train-mlogloss:0.347237	test-mlogloss:0.517221 for eta = 0.05. 
 m01 <- xgb.train(data = xgtrain, 
                  watchlist = watchlist, 
                  objective = "multi:softprob", 
@@ -41,11 +39,11 @@ m02 <- xgb.train(data = xgtrain,
                  eval_metric = "mlogloss", 
                  nthread = 2, 
                  max.depth = 6, 
-                 eta = 0.1, 
+                 eta = 0.05, 
                  min_child_weight = 1, 
                  subsample = 0.7, 
                  colsample_bytree = 0.7, 
-                 nround = 300, 
+                 nround = 525, 
                  verbose = 1)
 
 # 6. Generate predictions.
