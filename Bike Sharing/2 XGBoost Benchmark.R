@@ -13,7 +13,8 @@ train <- train %>%
          month = month(datetime), 
          year = year(datetime), 
          wday = wday(datetime), 
-         count = log1p(count))
+         count = log1p(count), 
+         count_lag1 = lag(count))
 test <- test  %>% 
   mutate(hour = hour(datetime), 
          month = month(datetime), 

@@ -1,14 +1,16 @@
-# 1. Load libraries.
+# 1.1 Load libraries.
 library(tidyverse)
 library(lubridate)
 library(jsonlite)
-library(xgboost)
 library(stringr)
-# library(broom)
-# library(h2o)
-# library(Matrix)
-# library(syuzhet)
-# library(lme4)
+library(tidytext)
+
+# 1.2 Machine learning libraries. 
+library(lme4)
+library(xgboost)
+library(lightgbm)
+library(randomForest)
+library(mlr)
 
 # 2. Load training data. 
 train <- fromJSON("./Two Sigma Connect/Raw Data/train.json")
@@ -24,3 +26,4 @@ str(test[, vars])
 
 # 4. Clean workspace.
 rm(vars)
+

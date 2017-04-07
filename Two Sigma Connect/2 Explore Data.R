@@ -1,4 +1,4 @@
-source("./Two Sigma Connect/1.001 Load Data.R")
+source("./Two Sigma Connect/1 Load Data.R")
 
 # 1. Examine data. 
 dim(train)
@@ -41,12 +41,13 @@ ggplot(train, aes(x = bedrooms, fill = interest_level)) +
   scale_x_continuous(breaks = seq(0, 8, 1))
 table(train$bedrooms, train$interest_level)
 round(prop.table(table(train$bedrooms, train$interest_level), 1), 2)
+table(str_c(train$bedrooms, train$bathrooms), train$interest_level)
 
 # 6. Price. Higher interest level with lower price. 
 ggplot(train %>% filter(percent_rank(price) <= 0.99), aes(x = price)) + 
   geom_histogram(binwidth = 100, fill = "blue")
 ggplot(train %>% filter(percent_rank(price) <= 0.99), aes(x = price)) + 
-  geom_freqpoly(aes(colour = interest_level))
+  geom_freqpoly(binwidth = 100, aes(colour = interest_level))
 ggplot(train %>% filter(percent_rank(price) <= 0.99), aes(x = price)) + 
   geom_density(aes(colour = interest_level))
 train %>% 
@@ -82,9 +83,11 @@ ggmap(nyc) +
 # Or just indicators of month end or month start or Friday. 
 ggplot(train, aes(x = date(created), fill = interest_level)) + 
   geom_bar()
+ggplot(train, aes(x = date(created), fill = interest_level)) + 
+  geom_bar(position = "fill")
 ggplot(train, aes(x = month(created), fill = interest_level)) + 
   geom_bar(position = "fill")
-ggplot(train, aes(x = date(created), fill = interest_level)) + 
+ggplot(train, aes(x = yday(created), fill = interest_level)) + 
   geom_bar(position = "fill")
 ggplot(train, aes(x = day(created), fill = interest_level)) + 
   geom_bar(position = "fill")
@@ -92,8 +95,11 @@ ggplot(train, aes(x = wday(created), fill = interest_level)) +
   geom_bar(position = "fill")
 ggplot(train, aes(x = hour(created), fill = interest_level)) + 
   geom_bar(position = "fill")
+ggplot(train, aes(x = minute(created), fill = interest_level)) + 
+  geom_bar(position = "fill")
 ggplot(train, aes(x = second(created), fill = interest_level)) + 
   geom_bar(position = "fill")
+
 
 # 9. Display address count. 
 # Hard to see pattern. 
@@ -159,8 +165,4 @@ ggplot(train %>% filter(building_id_count >= 8000),
   geom_bar(position = "fill")
 
 
-# 13. Unplotted features. 
-# description
-# manager_id
-# street_address
 
