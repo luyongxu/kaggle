@@ -25,11 +25,13 @@ combined <- combined %>%
 
 # 6. Mean encode high cardinality categorical variables. 
 mean_encode <- function(df, categorical_var) { 
+  set.seed(55555)
   df <- df %>% 
     mutate(low = ifelse(interest_level == 0, 1, 0), 
            medium = ifelse(interest_level == 1, 1, 0), 
            high = ifelse(interest_level == 2, 1, 0), 
-           fold = c(cut(seq(1, nrow(train)), breaks = 5, labels = FALSE), rep(NA, nrow(test))))
+           fold = c(sample(cut(seq(1, nrow(train)), breaks = 5, labels = FALSE)), 
+                    rep(NA, nrow(test))))
   pred <- data.frame()
   for (i in 1:5) { 
     df_train <- df %>% filter(fold != i)
@@ -40,7 +42,8 @@ mean_encode <- function(df, categorical_var) {
     df_test <- df_test %>% 
       mutate(categorical_var_low = predict(model_low, df_test, allow.new.levels = TRUE), 
              categorical_var_medium = predict(model_medium, df_test, allow.new.levels = TRUE), 
-             categorical_var_high = predict(model_high, df_test, allow.new.levels = TRUE))
+             categorical_var_high = predict(model_high, df_test, allow.new.levels = TRUE)) %>% 
+      select(listing_id, categorical_var_low, categorical_var_medium, categorical_var_high)
     pred <- bind_rows(pred, df_test)
   }
   df_train <- df %>% filter(is.numeric(fold))
@@ -51,19 +54,18 @@ mean_encode <- function(df, categorical_var) {
   df_test <- df_test %>% 
     mutate(categorical_var_low = predict(model_low, df_test, allow.new.levels = TRUE), 
            categorical_var_medium = predict(model_medium, df_test, allow.new.levels = TRUE), 
-           categorical_var_high = predict(model_high, df_test, allow.new.levels = TRUE))
+           categorical_var_high = predict(model_high, df_test, allow.new.levels = TRUE)) %>% 
+    select(listing_id, categorical_var_low, categorical_var_medium, categorical_var_high)
   pred <- bind_rows(pred, df_test)
   return(pred)
 }
 manager_pred <- mean_encode(combined, "manager_id") %>% 
-  select(manager_id_low = categorical_var_low, 
+  select(listing_id, 
+         manager_id_low = categorical_var_low, 
          manager_id_medium = categorical_var_medium, 
          manager_id_high = categorical_var_high)
-geohash_pred <- mean_encode(combined, "geohash") %>% 
-  select(geohash_low = categorical_var_low, 
-         geohash_medium = categorical_var_medium, 
-         geohash_high = categorical_var_high)
-combined <- bind_cols(combined, manager_pred, geohash_pred)
+combined <- combined %>% 
+  left_join(manager_pred)
 
 # 7. Label encode categorical features.
 combined <- combined %>%
@@ -90,14 +92,14 @@ combined <- combined %>%
 # 10. Features. Select features that have occured in 20 or more listings. Create document term matrix.
 features_top <- combined %>%
   mutate(features = ifelse(map(features, is_empty), c("empty"), features)) %>%
-  select(listing_id, features, interest_level) %>%
+  select(listing_id, features) %>%
   unnest(features) %>%
   mutate(features = tolower(features)) %>%
   count(features) %>%
   filter(n >= 20)
 features_dtm <- combined %>%
   mutate(features = ifelse(map(features, is_empty), c("empty"), features)) %>%
-  select(listing_id, features, interest_level) %>%
+  select(listing_id, features) %>%
   unnest(features) %>%
   mutate(features = tolower(features)) %>%
   count(listing_id, features) %>%
@@ -141,4 +143,6 @@ combined <- combined %>%
 train <- combined %>% filter(source == "train") %>% ungroup()
 test <- combined %>% filter(source == "test") %>% ungroup()
 
+# 16. clean workspace.
+rm(features_top, manager_pred, mean_encode)
 

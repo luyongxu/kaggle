@@ -100,7 +100,6 @@ ggplot(train, aes(x = minute(created), fill = interest_level)) +
 ggplot(train, aes(x = second(created), fill = interest_level)) + 
   geom_bar(position = "fill")
 
-
 # 9. Display address count. 
 # Hard to see pattern. 
 display_address_count <- train %>% 
