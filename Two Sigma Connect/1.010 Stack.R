@@ -8,7 +8,13 @@ features_to_use <- c("xgb_26_low", "xgb_26_medium", "xgb_26_high",
                      "gbm_01_low", "gbm_01_medium", "gbm_01_high", 
                      "ranger_01_low", "ranger_01_medium", "ranger_01_high", 
                      "glmnet_01_low", "glmnet_01_medium", "glmnet_01_high", 
-                     "price_rank", "price_rank2")
+                     "bathrooms", "bedrooms", "latitude", "longitude", "price", "listing_id", 
+                     "distance_center", "display_address_count", "manager_id_count", "building_id_count", 
+                     "street_address_count", "display_address", "manager_id", "street_address", 
+                     "photos_count", "features_count", "description_count", "building_id_zero", 
+                     "manager_id_low", "manager_id_medium", "manager_id_high", "photos_zero", 
+                     "bathrooms_standard", "created_hour", "price_rank", "price_rank2", 
+                     "street_display_sim", colnames(features_dtm))
 
 # 2. Read in meta features. 
 read_meta <- function(prefix, source) { 
