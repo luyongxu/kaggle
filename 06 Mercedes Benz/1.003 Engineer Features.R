@@ -16,8 +16,21 @@ combined <- bind_rows(train %>% mutate(source = "train"),
 pca <- prcomp(combined %>% select(X10:X385))
 combined <- combined %>%
   bind_cols(predict(pca, combined) %>%
-              as_tibble() %>%
+              as_tibble() %>% 
               select(PC3, PC5, PC10))
+
+#' # Calculate feature correlation with target.
+corr_results <- tibble()
+for (i in 11:378) { 
+  corr_results <- bind_rows(corr_results,
+                            tibble(feature = colnames(train)[i],
+                                   corr = cor(train$y, train[[i]])))
+}
+
+#' # Remove least correlated features. 
+corr_results <- corr_results %>% 
+  filter(abs(corr) < 0.10)
+combined <- combined[, !(colnames(combined) %in% corr_results$feature)]
 
 #' # Factor encode categorical features. 
 combined <- combined %>%

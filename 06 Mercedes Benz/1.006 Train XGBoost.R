@@ -60,9 +60,12 @@ for (i in 1:10) {
 cv_results %>% map_dbl(mean)
 nrounds <- cv_results %>% map_dbl(mean) %>% .[["best_iteration"]] %>% round()
 # seed             r2 best_iteration 
-# 5.5000000      0.5670535     84.1000000 
+# 5.5000000      0.5692077     62.8000000 
 # seed             r2 best_iteration 
-# 5.5000000      0.5673594   1519.4000000 
+# 5.5000000      0.5681277    122.3000000 
+# seed             r2 best_iteration 
+# 5.5000000      0.5677339     93.6000000
+
  
 #' # Train model.
 predictions_results <- tibble()
@@ -87,7 +90,7 @@ importance <- xgb.importance(model = model_xgb,
 predictions_results <- predictions_results %>% 
   group_by(ID) %>% 
   summarise(y = mean(y))
-write_csv(predictions, "./Mercedes Benz/Output/Base Models/xgb_10.csv")
+write_csv(predictions, "./Mercedes Benz/Output/Base Models/xgb_16.csv")
 
 
 
