@@ -1,21 +1,2 @@
 .Rproj.user
-00 Titanic/Raw Data/
-00 Titanic/Output/
-01 Bike Sharing/Raw Data/
-01 Bike Sharing/Output/
-02 House Prices/Raw Data/
-02 House Prices/Output/
-03 Two Sigma Connect/Raw Data/
-03 Two Sigma Connect/Output/
-04 Quora Question Pairs/Raw Data
-04 Quora Question Pairs/Output
-05 Sberbank/Raw Data
-05 Sberbank/Output
-06 Mercedes Benz/Raw Data
-06 Mercedes Benz/Output
-07 Zillow/Raw Data
-07 Zillow/Output
-08 Taxi Trip/Raw Data
-08 Taxi Trip/Output
-09 Web Traffic/Raw Data
-09 Web Traffic/Output
+*.csv
